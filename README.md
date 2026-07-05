@@ -16,8 +16,8 @@ Built with [Strands Agents](https://github.com/strands-agents/sdk-python) (agent
 - A Slack app with a **user token** (not a bot token).
 
 Full step-by-step instructions for the Google Cloud and Slack setup are in
-`20260423_Morning_briefing_agent_build_guide.docx` (sections 4–6). This README assumes
-those credentials already exist.
+`docs/20260423_Morning_briefing_agent_build_guide.docx` (sections 4–6). This README
+assumes those credentials already exist.
 
 ## Setup
 
@@ -90,5 +90,5 @@ touching the network or real credentials — see `CLAUDE.md` for the rationale.
 
 ## Full build guide
 
-`20260423_Morning_briefing_agent_build_guide.docx` in the repo root has the complete
-narrative walkthrough, including Google Cloud Console and Slack app screenshots.
+`docs/20260423_Morning_briefing_agent_build_guide.docx` has the complete narrative
+walkthrough, including Google Cloud Console and Slack app screenshots.

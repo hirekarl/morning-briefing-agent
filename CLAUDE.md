@@ -6,8 +6,8 @@ Project-specific guidance for Claude Code sessions working in this repo.
 
 An AI agent (Strands Agents + LiteLLM + OpenRouter free tier) that checks Gmail, Google
 Calendar, and Slack, then synthesizes a prioritized morning briefing. See `README.md` for
-setup/usage and `20260423_Morning_briefing_agent_build_guide.docx` for the full narrative
-build guide this project was scaffolded from. `.knowledge-base/` is authoritative
+setup/usage and `docs/20260423_Morning_briefing_agent_build_guide.docx` for the full
+narrative build guide this project was scaffolded from. `.knowledge-base/` is authoritative
 reference material for Strands Agents, LiteLLM, and OpenRouter — consult
 `.knowledge-base/integration-patterns.md` and `.knowledge-base/strands-agents/gotchas.md`
 before inventing API usage that isn't already established in `src/`.
