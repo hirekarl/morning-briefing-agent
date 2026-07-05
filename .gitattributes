@@ -1,0 +1,12 @@
+# Normalize all text files to LF in the repository
+* text=auto eol=lf
+
+# Never touch line endings inside binary/compressed formats
+*.docx binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary

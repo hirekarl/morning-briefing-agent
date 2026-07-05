@@ -1,0 +1,8 @@
+{
+  "ok": true,
+  "channels": [
+    { "id": "C001", "name": "general" },
+    { "id": "C002", "name": "engineering" },
+    { "id": "C003", "name": "random" }
+  ]
+}

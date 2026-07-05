@@ -1,0 +1,10 @@
+{
+  "summary": "Sprint planning",
+  "start": { "dateTime": "2026-07-05T10:00:00-04:00" },
+  "end": { "dateTime": "2026-07-05T11:00:00-04:00" },
+  "location": "Zoom",
+  "attendees": [
+    { "email": "alice@example.com", "responseStatus": "accepted" },
+    { "email": "bob@example.com", "responseStatus": "needsAction" }
+  ]
+}

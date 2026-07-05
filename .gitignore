@@ -460,3 +460,8 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,python,django,node
+
+### Project-specific ###
+# Google OAuth secrets (build guide section 3.3 / 5)
+credentials.json
+token.json
