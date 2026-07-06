@@ -4,12 +4,16 @@ An AI agent that checks Gmail, Google Calendar, and Slack, then synthesizes a pr
 
 Built with [Strands Agents](https://github.com/strands-agents/sdk-python) (agent loop), [LiteLLM](https://github.com/BerriAI/litellm) (model provider), and [OpenRouter](https://openrouter.ai) (free-tier LLM gateway).
 
+## About this repo
+
+This is one student's build of the Pursuit AI-native program's morning-briefing-agent assignment, following `docs/20260423_Morning_briefing_agent_build_guide.docx`. If you're a classmate working through the same guide: this repo intentionally diverges from it in places (see "Design decisions" below) rather than being a template to copy, and it was built together with an AI coding agent under a specific set of engineering practices — see `docs/working-with-claude-code.md` for the full story on how and why.
+
 ## Prerequisites
 
 - [uv](https://docs.astral.sh/uv/) installed.
 - An OpenRouter account and API key.
 - A Google Cloud project with the Gmail and Calendar APIs enabled, plus OAuth credentials.
-- A Slack app with a **user token** (not a bot token).
+- A Slack app with a **user token** (not a bot token) — the `.env` variable that holds it is still named `SLACK_BOT_TOKEN` regardless; don't be misled by that name into generating a bot token (`xoxb-`) instead.
 
 Full step-by-step instructions for the Google Cloud and Slack setup are in `docs/20260423_Morning_briefing_agent_build_guide.docx` (sections 4–6). This README assumes those credentials already exist.
 
@@ -48,7 +52,7 @@ Drop your downloaded `credentials.json` (Google OAuth client) in the project roo
 uv run morning-briefing
 ```
 
-The first run opens a browser window for Google OAuth login and writes `token.json` after you approve access. Subsequent runs reuse that token silently until it expires.
+The first run opens a browser window for Google OAuth login and writes `token.json` after you approve access. Subsequent runs reuse that token, silently refreshing it as needed — you'll only see the browser again if the refresh token itself is revoked or invalid.
 
 ## Development workflow
 
@@ -83,12 +87,14 @@ src/morning_briefing_agent/
 
 Each tool module separates pure data transforms (`parse_*`) and orchestration over an injected client (`fetch_*`) from the live `@tool`-decorated wrapper that constructs real credentials/clients. This is what makes the whole thing unit-testable without ever touching the network or real credentials — see `CLAUDE.md` for the rationale.
 
+`.knowledge-base/` (not shown above) is a separate, curated reference on OpenRouter, Strands Agents, and LiteLLM Proxy, built from real docs pages before any agent code was written — see `docs/working-with-claude-code.md` for what it is and how it was put together.
+
 ## Design decisions
 
 Places where this repo deviates from a literal reading of the build guide, and why:
 
 - **Layered tool architecture instead of one `agent.py`.** The guide's own suggested structure does OAuth, live API calls, and agent wiring in a single file. This repo splits each data source into a pure transform, an orchestration layer over an injected client, and a live `@tool` wrapper — see `CLAUDE.md`'s "Source layout rationale" for the full reasoning.
-- **Auto-router model (`openrouter/openrouter/free`) instead of a pinned free model.** Pinning to `openai/gpt-oss-120b`, `gpt-oss-20b`, and `meta-llama/llama-3.3-70b-instruct` were each tried live to avoid the auto-router landing on a model without tool-calling support. All three hit their own reliability problem instead: the `gpt-oss-*` models are reasoning models whose chain-of-thought content breaks multi-turn tool calling (observed live as empty final responses), and two of the three hit persistent upstream 429s. The auto-router succeeded cleanly by trying whichever backend currently has capacity. Override via `MODEL_ID` if you want to pin to a specific model anyway. See the comment above `DEFAULT_MODEL_ID` in `config.py` for the full writeup.
+- **Auto-router model (`openrouter/openrouter/free`) instead of a pinned free model.** `openai/gpt-oss-120b`, `gpt-oss-20b`, and `meta-llama/llama-3.3-70b-instruct` were each tried live as pins, to avoid the auto-router landing on a model without tool-calling support. All three hit their own reliability problem instead: the `gpt-oss-*` models are reasoning models whose chain-of-thought content breaks multi-turn tool calling (observed live as empty final responses), and two of the three hit persistent upstream 429s. The auto-router succeeded cleanly by trying whichever backend currently has capacity. Override via `MODEL_ID` if you want to pin to a specific model anyway. See the comment above `DEFAULT_MODEL_ID` in `config.py` for the full writeup.
 - **Cancelled and self-declined calendar events are filtered out, not just displayed.** `parse_calendar_event` didn't originally read `status` or `attendees[].responseStatus`, so a cancelled event or one you'd declined showed up in `UPCOMING EVENTS` identically to a real meeting. `fetch_upcoming_events` now filters those out before parsing, rather than leaving it to the LLM to notice.
 - **Slack highlights are attributed to a sender.** `parse_channel_messages` originally kept only message text, discarding who sent it, so the briefing could never say who posted anything. Messages now carry a `SlackMessage(sender, text)` shape through to the prompt.
 - **Every optional `.env` setting actually takes effect.** `load_settings()` originally read only the two required secrets from the environment — `model_id`, `max_tokens`, `temperature`, and the per-tool hours-back/hours-ahead/max-channels fields always resolved to hardcoded defaults regardless of `.env`. `check_gmail`/`check_calendar`/`check_slack` now resolve their defaults from `Settings` when the caller doesn't pass one, so the knobs listed in Setup above are real.
