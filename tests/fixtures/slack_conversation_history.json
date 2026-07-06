@@ -1,7 +1,7 @@
 {
   "ok": true,
   "messages": [
-    { "type": "message", "text": "Deploy is done", "ts": "1783245600.000100" },
-    { "type": "message", "text": "Thanks, looks good!", "ts": "1783242000.000100" }
+    { "type": "message", "user": "U1", "text": "Deploy is done", "ts": "1783245600.000100" },
+    { "type": "message", "user": "U2", "text": "Thanks, looks good!", "ts": "1783242000.000100" }
   ]
 }
