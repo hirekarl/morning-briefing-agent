@@ -8,7 +8,7 @@ Built with [Strands Agents](https://github.com/strands-agents/sdk-python) (agent
 
 ## About this repo
 
-This is one student's build of the Pursuit AI-native program's morning-briefing-agent assignment, following `docs/20260423_Morning_briefing_agent_build_guide.docx`. If you're a classmate working through the same guide: this repo intentionally diverges from it in places (see "Design decisions" below) rather than being a template to copy, and it was built together with an AI coding agent under a specific set of engineering practices — see `docs/working-with-claude-code.md` for the full story on how and why.
+This is [Karl Johnson](https://www.linkedin.com/in/hirekarl)'s build of the Pursuit AI-native program's morning-briefing-agent assignment, following `docs/20260423_Morning_briefing_agent_build_guide.docx`. If you're a classmate working through the same guide: this repo intentionally diverges from it in places (see "Design decisions" below) rather than being a template to copy, and it was built together with an AI coding agent under a specific set of engineering practices — see `docs/working-with-claude-code.md` for the full story on how and why.
 
 ## Prerequisites
 
@@ -113,3 +113,7 @@ Places where this repo deviates from a literal reading of the build guide, and w
 `docs/20260423_Morning_briefing_agent_build_guide.docx` has the complete narrative walkthrough, including Google Cloud Console and Slack app screenshots.
 
 If you're new to `uv`, pre-commit hooks, TDD, or working with an AI coding agent, `docs/working-with-claude-code.md` explains all of that from scratch, plus the reasoning behind how this repo was built with Claude Code.
+
+## Author
+
+[Karl Johnson](https://www.linkedin.com/in/hirekarl)
