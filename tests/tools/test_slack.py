@@ -82,3 +82,22 @@ def test_check_slack_wires_client_and_fetch(mocker: Any) -> None:
     mock_build_client.assert_called_once_with("xoxp-test")
     mock_fetch.assert_called_once_with(fake_client, hours_back=6, max_channels=3)
     assert result == [{"channel": "general", "messages": ["hi"]}]
+
+
+def test_check_slack_defaults_hours_back_and_max_channels_from_settings(mocker: Any) -> None:
+    mocker.patch("morning_briefing_agent.tools.slack.build_slack_client")
+    mock_fetch = mocker.patch(
+        "morning_briefing_agent.tools.slack.fetch_recent_channel_activity", return_value=[]
+    )
+    mocker.patch(
+        "morning_briefing_agent.tools.slack.load_settings",
+        return_value=mocker.Mock(
+            slack_bot_token="xoxp-test",  # noqa: S106
+            slack_hours_back=6,
+            slack_max_channels=2,
+        ),
+    )
+
+    check_slack()
+
+    mock_fetch.assert_called_once_with(mocker.ANY, hours_back=6, max_channels=2)

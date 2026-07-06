@@ -54,14 +54,21 @@ def fetch_recent_channel_activity(
 
 
 @tool
-def check_slack(hours_back: int = 12, max_channels: int = 5) -> list[dict[str, Any]]:
+def check_slack(
+    hours_back: int | None = None, max_channels: int | None = None
+) -> list[dict[str, Any]]:
     """Check recent Slack activity in the `max_channels` most recently active channels.
 
-    Returns a list of dicts with channel name and up to 5 recent messages per
-    channel, for channels with activity in the last `hours_back` hours.
+    Defaults to the configured `SLACK_HOURS_BACK`/`SLACK_MAX_CHANNELS` settings
+    when not given. Returns a list of dicts with channel name and up to 5 recent
+    messages per channel, for channels with activity in the last `hours_back` hours.
     """
     settings = load_settings()
     client = build_slack_client(settings.slack_bot_token)
+    if hours_back is None:
+        hours_back = settings.slack_hours_back
+    if max_channels is None:
+        max_channels = settings.slack_max_channels
     digests = fetch_recent_channel_activity(
         client, hours_back=hours_back, max_channels=max_channels
     )
