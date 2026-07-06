@@ -16,13 +16,13 @@ POST https://openrouter.ai/api/v1/chat/completions
 
 Standard OpenAI-compatible parameters are supported:
 
-| Parameter | Purpose |
-|---|---|
-| `model` | Model identifier/slug |
-| `messages` | Conversation history array |
-| `temperature` | Response randomness |
-| `max_tokens` | Output length limit |
-| `tools` | Function-calling definitions |
+| Parameter     | Purpose                      |
+| ------------- | ---------------------------- |
+| `model`       | Model identifier/slug        |
+| `messages`    | Conversation history array   |
+| `temperature` | Response randomness          |
+| `max_tokens`  | Output length limit          |
+| `tools`       | Function-calling definitions |
 
 ## Advanced features
 

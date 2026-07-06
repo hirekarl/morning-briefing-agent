@@ -2,11 +2,11 @@
 
 This is a map-and-leaf knowledge base for the three pieces of the Python agent backend built this week at Pursuit:
 
-| Tool | Role | Section |
-|---|---|---|
-| **OpenRouter** | Unified API for hundreds of LLMs behind one OpenAI-compatible endpoint | [`openrouter/_map.md`](openrouter/_map.md) |
-| **Strands Agents** | Python agent framework (agent loop, tools, model providers) | [`strands-agents/_map.md`](strands-agents/_map.md) |
-| **LiteLLM Proxy** | Self-hosted, Dockerized OpenAI-compatible proxy in front of any provider | [`litellm-proxy/_map.md`](litellm-proxy/_map.md) |
+| Tool               | Role                                                                     | Section                                            |
+| ------------------ | ------------------------------------------------------------------------ | -------------------------------------------------- |
+| **OpenRouter**     | Unified API for hundreds of LLMs behind one OpenAI-compatible endpoint   | [`openrouter/_map.md`](openrouter/_map.md)         |
+| **Strands Agents** | Python agent framework (agent loop, tools, model providers)              | [`strands-agents/_map.md`](strands-agents/_map.md) |
+| **LiteLLM Proxy**  | Self-hosted, Dockerized OpenAI-compatible proxy in front of any provider | [`litellm-proxy/_map.md`](litellm-proxy/_map.md)   |
 
 Each section folder has a `_map.md` (orientation + links) and one leaf file per topic. Leaf files hold the actual config tables, gotchas, and full code snippets — the maps never duplicate that content, they just point to it.
 
@@ -22,6 +22,7 @@ Start there if you already know you're wiring an agent end-to-end. Start in a to
 ## Source coverage
 
 All content here was pulled from:
+
 - OpenRouter: `docs/quickstart`
 - Strands Agents: `docs/user-guide/quickstart/python/`, `docs/user-guide/concepts/model-providers/litellm/`
 - LiteLLM: `docs/proxy/docker_quick_start`, `docs/proxy/configs`

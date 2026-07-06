@@ -1,12 +1,8 @@
 # Morning Briefing Agent
 
-An AI agent that checks Gmail, Google Calendar, and Slack, then synthesizes a prioritized
-morning briefing: **URGENT**, **UPCOMING EVENTS**, **SLACK HIGHLIGHTS**, **OTHER EMAILS**,
-and **SUGGESTED ACTIONS**.
+An AI agent that checks Gmail, Google Calendar, and Slack, then synthesizes a prioritized morning briefing: **URGENT**, **UPCOMING EVENTS**, **SLACK HIGHLIGHTS**, **OTHER EMAILS**, and **SUGGESTED ACTIONS**.
 
-Built with [Strands Agents](https://github.com/strands-agents/sdk-python) (agent loop),
-[LiteLLM](https://github.com/BerriAI/litellm) (model provider), and
-[OpenRouter](https://openrouter.ai) (free-tier LLM gateway).
+Built with [Strands Agents](https://github.com/strands-agents/sdk-python) (agent loop), [LiteLLM](https://github.com/BerriAI/litellm) (model provider), and [OpenRouter](https://openrouter.ai) (free-tier LLM gateway).
 
 ## Prerequisites
 
@@ -15,9 +11,7 @@ Built with [Strands Agents](https://github.com/strands-agents/sdk-python) (agent
 - A Google Cloud project with the Gmail and Calendar APIs enabled, plus OAuth credentials.
 - A Slack app with a **user token** (not a bot token).
 
-Full step-by-step instructions for the Google Cloud and Slack setup are in
-`docs/20260423_Morning_briefing_agent_build_guide.docx` (sections 4–6). This README
-assumes those credentials already exist.
+Full step-by-step instructions for the Google Cloud and Slack setup are in `docs/20260423_Morning_briefing_agent_build_guide.docx` (sections 4–6). This README assumes those credentials already exist.
 
 ## Setup
 
@@ -33,8 +27,7 @@ OPENROUTER_API_KEY=sk-or-your-key-here
 SLACK_BOT_TOKEN=xoxp-your-token-here
 ```
 
-Everything else in `Settings` (`src/morning_briefing_agent/config.py`) is optional and falls
-back to a sensible default if unset — override any of them in `.env` if needed:
+Everything else in `Settings` (`src/morning_briefing_agent/config.py`) is optional and falls back to a sensible default if unset — override any of them in `.env` if needed:
 
 ```
 MODEL_ID=openrouter/openrouter/free
@@ -47,8 +40,7 @@ SLACK_HOURS_BACK=12
 SLACK_MAX_CHANNELS=5
 ```
 
-Drop your downloaded `credentials.json` (Google OAuth client) in the project root.
-`.env`, `credentials.json`, and `token.json` are all gitignored — never commit them.
+Drop your downloaded `credentials.json` (Google OAuth client) in the project root. `.env`, `credentials.json`, and `token.json` are all gitignored — never commit them.
 
 ## Running
 
@@ -56,19 +48,18 @@ Drop your downloaded `credentials.json` (Google OAuth client) in the project roo
 uv run morning-briefing
 ```
 
-The first run opens a browser window for Google OAuth login and writes `token.json`
-after you approve access. Subsequent runs reuse that token silently until it expires.
+The first run opens a browser window for Google OAuth login and writes `token.json` after you approve access. Subsequent runs reuse that token silently until it expires.
 
 ## Development workflow
 
-This project is built test-first: extend or add a test under `tests/` before touching
-`src/`, run it red, then implement until green.
+This project is built test-first: extend or add a test under `tests/` before touching `src/`, run it red, then implement until green.
 
 ```bash
 uv run pytest                    # run the test suite (coverage gate: 90%)
 uv run mypy src                  # type-check
 uv run ruff check .              # lint
 uv run ruff format .             # format
+uv run mdformat --wrap no --number .  # format Markdown (no hard-wrapping)
 uv run pre-commit run --all-files  # everything pre-commit enforces
 uv run cz commit                 # interactive Conventional Commits helper
 ```
@@ -90,19 +81,27 @@ src/morning_briefing_agent/
   cli.py          # run(), main() — entry point
 ```
 
-Each tool module separates pure data transforms (`parse_*`) and orchestration over an
-injected client (`fetch_*`) from the live `@tool`-decorated wrapper that constructs real
-credentials/clients. This is what makes the whole thing unit-testable without ever
-touching the network or real credentials — see `CLAUDE.md` for the rationale.
+Each tool module separates pure data transforms (`parse_*`) and orchestration over an injected client (`fetch_*`) from the live `@tool`-decorated wrapper that constructs real credentials/clients. This is what makes the whole thing unit-testable without ever touching the network or real credentials — see `CLAUDE.md` for the rationale.
+
+## Design decisions
+
+Places where this repo deviates from a literal reading of the build guide, and why:
+
+- **Layered tool architecture instead of one `agent.py`.** The guide's own suggested structure does OAuth, live API calls, and agent wiring in a single file. This repo splits each data source into a pure transform, an orchestration layer over an injected client, and a live `@tool` wrapper — see `CLAUDE.md`'s "Source layout rationale" for the full reasoning.
+- **Auto-router model (`openrouter/openrouter/free`) instead of a pinned free model.** Pinning to `openai/gpt-oss-120b`, `gpt-oss-20b`, and `meta-llama/llama-3.3-70b-instruct` were each tried live to avoid the auto-router landing on a model without tool-calling support. All three hit their own reliability problem instead: the `gpt-oss-*` models are reasoning models whose chain-of-thought content breaks multi-turn tool calling (observed live as empty final responses), and two of the three hit persistent upstream 429s. The auto-router succeeded cleanly by trying whichever backend currently has capacity. Override via `MODEL_ID` if you want to pin to a specific model anyway. See the comment above `DEFAULT_MODEL_ID` in `config.py` for the full writeup.
+- **Cancelled and self-declined calendar events are filtered out, not just displayed.** `parse_calendar_event` didn't originally read `status` or `attendees[].responseStatus`, so a cancelled event or one you'd declined showed up in `UPCOMING EVENTS` identically to a real meeting. `fetch_upcoming_events` now filters those out before parsing, rather than leaving it to the LLM to notice.
+- **Slack highlights are attributed to a sender.** `parse_channel_messages` originally kept only message text, discarding who sent it, so the briefing could never say who posted anything. Messages now carry a `SlackMessage(sender, text)` shape through to the prompt.
+- **Every optional `.env` setting actually takes effect.** `load_settings()` originally read only the two required secrets from the environment — `model_id`, `max_tokens`, `temperature`, and the per-tool hours-back/hours-ahead/max-channels fields always resolved to hardcoded defaults regardless of `.env`. `check_gmail`/`check_calendar`/`check_slack` now resolve their defaults from `Settings` when the caller doesn't pass one, so the knobs listed in Setup above are real.
+- **The default Strands callback handler is disabled.** It streams the assistant's response straight to the console as it's generated; `cli.py` then prints the returned result again, so every run printed the briefing twice until this was turned off.
 
 ## Secrets & security
 
 - `.env`, `credentials.json`, and `token.json` are gitignored and must never be committed.
-- The Slack token is a **personal user token** (`xoxp-`) — it authenticates as you, reads
-  any channel you're already in. Do not share it or use it outside a personal, local tool.
+- The Slack token is a **personal user token** (`xoxp-`) — it authenticates as you, reads any channel you're already in. Do not share it or use it outside a personal, local tool.
 - If any secret is ever accidentally committed, revoke and regenerate it immediately.
 
 ## Full build guide
 
-`docs/20260423_Morning_briefing_agent_build_guide.docx` has the complete narrative
-walkthrough, including Google Cloud Console and Slack app screenshots.
+`docs/20260423_Morning_briefing_agent_build_guide.docx` has the complete narrative walkthrough, including Google Cloud Console and Slack app screenshots.
+
+If you're new to `uv`, pre-commit hooks, TDD, or working with an AI coding agent, `docs/working-with-claude-code.md` explains all of that from scratch, plus the reasoning behind how this repo was built with Claude Code.

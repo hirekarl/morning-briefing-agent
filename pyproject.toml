@@ -20,6 +20,8 @@ morning-briefing = "morning_briefing_agent.cli:main"
 [dependency-groups]
 dev = [
     "commitizen>=4.16.4",
+    "mdformat>=1.0.0",
+    "mdformat-gfm>=1.0.0",
     "mypy>=2.1.0",
     "pre-commit>=4.6.0",
     "pytest>=9.1.1",

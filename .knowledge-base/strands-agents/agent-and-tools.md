@@ -31,6 +31,7 @@ def my_tool(param1: str, param2: int) -> str:
 ```
 
 Rules:
+
 - **Type hints are required** on every parameter — the agent uses them to validate/construct tool calls.
 - **The docstring is not just documentation** — it's sent to the LLM as part of the tool's definition, so write it as you would a description for the model, not just for a human reader.
 - `@tool` only works on plain Python functions.

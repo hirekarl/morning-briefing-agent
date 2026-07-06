@@ -24,10 +24,10 @@ agent = Agent(model=model)
 
 ## Configuration parameters
 
-| Parameter | Location | Purpose |
-|---|---|---|
-| `model_id` | `LiteLLMModel(...)` | `<provider>/<model>` identifier, e.g. `anthropic/claude-3-7-sonnet-20250219` |
-| `params` | `LiteLLMModel(...)` | Model-specific settings: `max_tokens`, `temperature`, etc. |
+| Parameter     | Location            | Purpose                                                                                 |
+| ------------- | ------------------- | --------------------------------------------------------------------------------------- |
+| `model_id`    | `LiteLLMModel(...)` | `<provider>/<model>` identifier, e.g. `anthropic/claude-3-7-sonnet-20250219`            |
+| `params`      | `LiteLLMModel(...)` | Model-specific settings: `max_tokens`, `temperature`, etc.                              |
 | `client_args` | `LiteLLMModel(...)` | Passed through to LiteLLM's completion API — `api_key`, `api_base`, `use_litellm_proxy` |
 
 ## Connecting to a self-hosted LiteLLM proxy
@@ -35,6 +35,7 @@ agent = Agent(model=model)
 Two equivalent approaches — see [`../../litellm-proxy/_map.md`](../../litellm-proxy/_map.md) for running the proxy itself.
 
 **Option 1 — explicit flag:**
+
 ```python
 model = LiteLLMModel(
     client_args={
@@ -47,6 +48,7 @@ model = LiteLLMModel(
 ```
 
 **Option 2 — `litellm_proxy/` model-id prefix:**
+
 ```python
 model = LiteLLMModel(
     client_args={"api_key": "<PROXY_KEY>", "api_base": "<PROXY_URL>"},

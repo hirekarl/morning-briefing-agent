@@ -5,6 +5,7 @@ Kept here for contrast — this project uses LiteLLM (see [`litellm.md`](litellm
 ## Credentials
 
 Configure AWS credentials via one of:
+
 - Environment variables: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_SESSION_TOKEN`
 - AWS credentials file (`aws configure`)
 - IAM roles (EC2, ECS, Lambda)

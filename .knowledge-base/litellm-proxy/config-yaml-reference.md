@@ -2,14 +2,14 @@
 
 ## Top-level sections
 
-| Section | Purpose |
-|---|---|
-| `model_list` | Available models and their deployment configs |
-| `router_settings` | Routing behavior, load balancing, retries/timeouts |
-| `litellm_settings` | Module-level LiteLLM config (fallbacks, verbosity, logging) |
-| `general_settings` | Server/database/admin-auth config |
-| `environment_variables` | Optional: external env config block |
-| `credential_list` | Reusable named credentials, referenced from `model_list` |
+| Section                 | Purpose                                                     |
+| ----------------------- | ----------------------------------------------------------- |
+| `model_list`            | Available models and their deployment configs               |
+| `router_settings`       | Routing behavior, load balancing, retries/timeouts          |
+| `litellm_settings`      | Module-level LiteLLM config (fallbacks, verbosity, logging) |
+| `general_settings`      | Server/database/admin-auth config                           |
+| `environment_variables` | Optional: external env config block                         |
+| `credential_list`       | Reusable named credentials, referenced from `model_list`    |
 
 ## `model_list`
 
@@ -71,6 +71,7 @@ model_list:
     litellm_params:
       model: "*"
 ```
+
 Allows requests to any model without an explicit entry, provided credentials exist in the environment.
 
 ### Load balancing (same `model_name`, multiple deployments)
@@ -92,6 +93,7 @@ router_settings:
   routing_strategy: "simple-shuffle"
   redis_host: <redis-host>
 ```
+
 Weighted picks are based on established tpm/rpm across the deployments sharing a `model_name`.
 
 ## `router_settings`

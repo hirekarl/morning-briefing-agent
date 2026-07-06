@@ -4,11 +4,11 @@ All requests require bearer token authentication via the `Authorization` header.
 
 ## Required and optional headers
 
-| Header | Required | Purpose |
-|---|---|---|
-| `Authorization` | Yes | `Bearer <OPENROUTER_API_KEY>` |
-| `HTTP-Referer` | No | Enables app attribution on OpenRouter leaderboards |
-| `X-OpenRouter-Title` | No | App name shown in attribution |
+| Header               | Required | Purpose                                            |
+| -------------------- | -------- | -------------------------------------------------- |
+| `Authorization`      | Yes      | `Bearer <OPENROUTER_API_KEY>`                      |
+| `HTTP-Referer`       | No       | Enables app attribution on OpenRouter leaderboards |
+| `X-OpenRouter-Title` | No       | App name shown in attribution                      |
 
 ## Raw request example
 
