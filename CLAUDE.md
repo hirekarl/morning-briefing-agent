@@ -48,7 +48,7 @@ Conventional Commits, enforced by commitizen's `commit-msg` pre-commit hook (con
 
 ## Pre-commit
 
-`uv run pre-commit install` (run once per clone) installs both the `pre-commit` and `commit-msg` hook types — this repo's `.pre-commit-config.yaml` sets `default_install_hook_types: [pre-commit, commit-msg]` so a bare `pre-commit install` without that key would silently skip the commitizen commit-msg check. Every commit runs ruff (lint + format), mypy, and the standard hygiene hooks (trailing whitespace, EOF fixer, large-file check, private-key detection, LF line-ending enforcement matching `.gitattributes`).
+`uv run pre-commit install` (run once per clone) installs both the `pre-commit` and `commit-msg` hook types — this repo's `.pre-commit-config.yaml` sets `default_install_hook_types: [pre-commit, commit-msg]` so a bare `pre-commit install` without that key would silently skip the commitizen commit-msg check. Every commit runs ruff (lint + format), mypy, mdformat, and the standard hygiene hooks (trailing whitespace, EOF fixer, large-file check, private-key detection, LF line-ending enforcement matching `.gitattributes`).
 
 ## Secrets handling
 
