@@ -56,6 +56,7 @@ def test_build_agent_passes_model_and_all_three_tools(mocker: Any) -> None:
     assert kwargs["model"] is fake_model
     assert kwargs["tools"] == [check_gmail, check_calendar, check_slack]
     assert kwargs["system_prompt"] == SYSTEM_PROMPT
+    assert kwargs["callback_handler"] is None
 
 
 def test_build_agent_loads_settings_when_none_given(mocker: Any) -> None:
