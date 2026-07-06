@@ -108,7 +108,7 @@ warn_return_any = false
 
 [tool.pytest.ini_options]
 minversion = "8.0"
-addopts = "-ra --strict-markers --strict-config --import-mode=importlib --cov=morning_briefing_agent --cov-branch --cov-report=term-missing --cov-fail-under=90"
+addopts = "-ra --strict-markers --strict-config --import-mode=importlib --cov=morning_briefing_agent --cov-branch --cov-report=term-missing --cov-report=xml --cov-fail-under=90"
 testpaths = ["tests"]
 pythonpath = ["."]
 markers = [

@@ -1,0 +1,81 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Bump version, tag, and publish release
+    runs-on: ubuntu-latest
+    if: ${{ !startsWith(github.event.head_commit.message, 'bump:') }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v8.3.0
+        with:
+          python-version: "3.12"
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --all-groups
+
+      - name: Configure git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Bump version and update changelog
+        id: bump
+        run: |
+          set +e
+          uv run cz bump --changelog --yes
+          exit_code=$?
+          set -e
+
+          if [ "$exit_code" -eq 21 ]; then
+            echo "No bumpable commits since last release; skipping."
+            echo "bumped=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          elif [ "$exit_code" -ne 0 ]; then
+            echo "cz bump failed with exit code $exit_code"
+            exit "$exit_code"
+          fi
+
+          echo "bumped=true" >> "$GITHUB_OUTPUT"
+          version="$(uv run cz version --project)"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Extract changelog entry for this release
+        if: steps.bump.outputs.bumped == 'true'
+        run: |
+          awk '
+            /^## / { count++; if (count == 2) exit }
+            count == 1 { print }
+          ' CHANGELOG.md > "$RUNNER_TEMP/release_notes.md"
+
+      - name: Push version bump commit and tag
+        if: steps.bump.outputs.bumped == 'true'
+        run: git push origin HEAD:main --follow-tags
+
+      - name: Create GitHub Release
+        if: steps.bump.outputs.bumped == 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.bump.outputs.version }}
+          name: v${{ steps.bump.outputs.version }}
+          body_path: ${{ runner.temp }}/release_notes.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
