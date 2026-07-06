@@ -1,5 +1,7 @@
 # Morning Briefing Agent
 
+[![CI](https://github.com/hirekarl/morning-briefing-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/hirekarl/morning-briefing-agent/actions/workflows/ci.yml) [![codecov](https://codecov.io/gh/hirekarl/morning-briefing-agent/branch/main/graph/badge.svg)](https://codecov.io/gh/hirekarl/morning-briefing-agent)
+
 An AI agent that checks Gmail, Google Calendar, and Slack, then synthesizes a prioritized morning briefing: **URGENT**, **UPCOMING EVENTS**, **SLACK HIGHLIGHTS**, **OTHER EMAILS**, and **SUGGESTED ACTIONS**.
 
 Built with [Strands Agents](https://github.com/strands-agents/sdk-python) (agent loop), [LiteLLM](https://github.com/BerriAI/litellm) (model provider), and [OpenRouter](https://openrouter.ai) (free-tier LLM gateway).
