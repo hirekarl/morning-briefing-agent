@@ -1,0 +1,8 @@
+{
+  "status": "cancelled",
+  "summary": "Cancelled sync",
+  "start": { "dateTime": "2026-07-05T14:00:00-04:00" },
+  "end": { "dateTime": "2026-07-05T14:30:00-04:00" },
+  "location": "",
+  "attendees": []
+}
