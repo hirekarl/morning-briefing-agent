@@ -9,7 +9,7 @@ from strands import tool
 from morning_briefing_agent import time_utils
 from morning_briefing_agent.clients import build_slack_client
 from morning_briefing_agent.config import load_settings
-from morning_briefing_agent.models import ChannelDigest
+from morning_briefing_agent.models import ChannelDigest, SlackMessage
 
 MAX_MESSAGES_PER_CHANNEL = 5
 CHANNEL_TYPES = "public_channel,private_channel"
@@ -27,8 +27,11 @@ class SlackClientProtocol(Protocol):
 
 
 def parse_channel_messages(channel_name: str, messages: list[dict[str, Any]]) -> ChannelDigest:
-    texts = [message.get("text", "") for message in messages[:MAX_MESSAGES_PER_CHANNEL]]
-    return ChannelDigest(channel=channel_name, messages=texts)
+    entries = [
+        SlackMessage(sender=message.get("user", ""), text=message.get("text", ""))
+        for message in messages[:MAX_MESSAGES_PER_CHANNEL]
+    ]
+    return ChannelDigest(channel=channel_name, messages=entries)
 
 
 def fetch_recent_channel_activity(

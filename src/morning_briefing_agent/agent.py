@@ -18,6 +18,9 @@ UPCOMING EVENTS
 SLACK HIGHLIGHTS
 OTHER EMAILS
 SUGGESTED ACTIONS
+
+Each Slack message includes a `sender` (a Slack user ID) and `text`. Attribute \
+highlights to their sender (e.g. "U012ABC flagged...") rather than quoting text alone.
 """
 
 

@@ -21,6 +21,12 @@ class EventSummary:
 
 
 @dataclass(frozen=True, slots=True)
+class SlackMessage:
+    sender: str
+    text: str
+
+
+@dataclass(frozen=True, slots=True)
 class ChannelDigest:
     channel: str
-    messages: list[str]
+    messages: list[SlackMessage]
