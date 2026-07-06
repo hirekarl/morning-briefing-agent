@@ -9,6 +9,7 @@ from strands import tool
 
 from morning_briefing_agent import time_utils
 from morning_briefing_agent.clients import build_gmail_service
+from morning_briefing_agent.config import load_settings
 from morning_briefing_agent.google_auth import get_google_credentials
 from morning_briefing_agent.models import EmailSummary
 
@@ -76,12 +77,15 @@ def fetch_recent_emails(service: GmailServiceProtocol, hours_back: int = 12) -> 
 
 
 @tool
-def check_gmail(hours_back: int = 12) -> list[dict[str, str]]:
+def check_gmail(hours_back: int | None = None) -> list[dict[str, str]]:
     """Check for unread Gmail messages from the last `hours_back` hours.
 
+    Defaults to the configured `GMAIL_HOURS_BACK` setting when not given.
     Returns a list of dicts with sender, subject, date, and a snippet (max 200
     characters) for each unread email received within the time window.
     """
+    if hours_back is None:
+        hours_back = load_settings().gmail_hours_back
     credentials = get_google_credentials()
     service = build_gmail_service(credentials)
     emails = fetch_recent_emails(service, hours_back=hours_back)

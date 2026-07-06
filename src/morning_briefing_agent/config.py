@@ -52,4 +52,12 @@ def load_settings() -> Settings:
     return Settings(
         openrouter_api_key=os.environ["OPENROUTER_API_KEY"],
         slack_bot_token=os.environ["SLACK_BOT_TOKEN"],
+        model_id=os.getenv("MODEL_ID", DEFAULT_MODEL_ID),
+        openrouter_api_base=os.getenv("OPENROUTER_API_BASE", DEFAULT_OPENROUTER_API_BASE),
+        max_tokens=int(os.getenv("MAX_TOKENS", DEFAULT_MAX_TOKENS)),
+        temperature=float(os.getenv("TEMPERATURE", DEFAULT_TEMPERATURE)),
+        gmail_hours_back=int(os.getenv("GMAIL_HOURS_BACK", DEFAULT_GMAIL_HOURS_BACK)),
+        calendar_hours_ahead=int(os.getenv("CALENDAR_HOURS_AHEAD", DEFAULT_CALENDAR_HOURS_AHEAD)),
+        slack_hours_back=int(os.getenv("SLACK_HOURS_BACK", DEFAULT_SLACK_HOURS_BACK)),
+        slack_max_channels=int(os.getenv("SLACK_MAX_CHANNELS", DEFAULT_SLACK_MAX_CHANNELS)),
     )

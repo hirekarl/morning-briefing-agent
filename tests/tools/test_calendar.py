@@ -78,3 +78,19 @@ def test_check_calendar_wires_credentials_service_and_fetch(mocker: Any) -> None
     mock_build_service.assert_called_once_with(fake_creds)
     mock_fetch.assert_called_once_with(fake_service, hours_ahead=48)
     assert result == [{"title": "t", "start": "s", "end": "e", "location": "l", "attendees": ["a"]}]
+
+
+def test_check_calendar_defaults_hours_ahead_from_settings(mocker: Any) -> None:
+    mocker.patch("morning_briefing_agent.tools.calendar.get_google_credentials")
+    mocker.patch("morning_briefing_agent.tools.calendar.build_calendar_service")
+    mock_fetch = mocker.patch(
+        "morning_briefing_agent.tools.calendar.fetch_upcoming_events", return_value=[]
+    )
+    mocker.patch(
+        "morning_briefing_agent.tools.calendar.load_settings",
+        return_value=mocker.Mock(calendar_hours_ahead=48),
+    )
+
+    check_calendar()
+
+    assert mock_fetch.call_args.kwargs["hours_ahead"] == 48

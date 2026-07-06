@@ -85,3 +85,19 @@ def test_check_gmail_wires_credentials_service_and_fetch(mocker) -> None:  # typ
     mock_build_service.assert_called_once_with(fake_creds)
     mock_fetch.assert_called_once_with(fake_service, hours_back=24)
     assert result == [{"sender": "a", "subject": "b", "date": "c", "snippet": "d"}]
+
+
+def test_check_gmail_defaults_hours_back_from_settings(mocker) -> None:  # type: ignore[no-untyped-def]
+    mocker.patch("morning_briefing_agent.tools.gmail.get_google_credentials")
+    mocker.patch("morning_briefing_agent.tools.gmail.build_gmail_service")
+    mock_fetch = mocker.patch(
+        "morning_briefing_agent.tools.gmail.fetch_recent_emails", return_value=[]
+    )
+    mocker.patch(
+        "morning_briefing_agent.tools.gmail.load_settings",
+        return_value=mocker.Mock(gmail_hours_back=6),
+    )
+
+    check_gmail()
+
+    assert mock_fetch.call_args.kwargs["hours_back"] == 6

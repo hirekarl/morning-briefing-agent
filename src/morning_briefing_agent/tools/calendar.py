@@ -8,6 +8,7 @@ from strands import tool
 
 from morning_briefing_agent import time_utils
 from morning_briefing_agent.clients import build_calendar_service
+from morning_briefing_agent.config import load_settings
 from morning_briefing_agent.google_auth import get_google_credentials
 from morning_briefing_agent.models import EventSummary
 
@@ -69,12 +70,15 @@ def fetch_upcoming_events(
 
 
 @tool
-def check_calendar(hours_ahead: int = 24) -> list[dict[str, Any]]:
+def check_calendar(hours_ahead: int | None = None) -> list[dict[str, Any]]:
     """Check for upcoming Google Calendar events in the next `hours_ahead` hours.
 
+    Defaults to the configured `CALENDAR_HOURS_AHEAD` setting when not given.
     Returns a list of dicts with title, start, end, location, and attendees
     for each event starting within the time window.
     """
+    if hours_ahead is None:
+        hours_ahead = load_settings().calendar_hours_ahead
     credentials = get_google_credentials()
     service = build_calendar_service(credentials)
     events = fetch_upcoming_events(service, hours_ahead=hours_ahead)

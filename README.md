@@ -33,6 +33,20 @@ OPENROUTER_API_KEY=sk-or-your-key-here
 SLACK_BOT_TOKEN=xoxp-your-token-here
 ```
 
+Everything else in `Settings` (`src/morning_briefing_agent/config.py`) is optional and falls
+back to a sensible default if unset — override any of them in `.env` if needed:
+
+```
+MODEL_ID=openrouter/openrouter/free
+OPENROUTER_API_BASE=https://openrouter.ai/api/v1
+MAX_TOKENS=4096
+TEMPERATURE=0.7
+GMAIL_HOURS_BACK=12
+CALENDAR_HOURS_AHEAD=24
+SLACK_HOURS_BACK=12
+SLACK_MAX_CHANNELS=5
+```
+
 Drop your downloaded `credentials.json` (Google OAuth client) in the project root.
 `.env`, `credentials.json`, and `token.json` are all gitignored — never commit them.
 
