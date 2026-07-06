@@ -5,6 +5,15 @@ from dataclasses import dataclass
 
 from dotenv import load_dotenv
 
+# Pinning to a single named free model was tried (openai/gpt-oss-120b, gpt-oss-20b, then
+# meta-llama/llama-3.3-70b-instruct) to avoid the auto-router landing on a model without tool
+# calling support. In practice every pinned model hit its own reliability problem instead: the
+# gpt-oss-* models are reasoning models whose chain-of-thought content breaks multi-turn tool
+# calling over the Chat Completions API (observed live: empty final responses), and both
+# gpt-oss-120b and llama-3.3-70b-instruct hit persistent upstream 429s from their specific
+# backend. The auto-router succeeded immediately and cleanly in the same live test by trying
+# whichever backend currently has capacity. Override via MODEL_ID in .env if you want to pin
+# to a specific model anyway (e.g. once a particular free model's availability stabilizes).
 DEFAULT_MODEL_ID = "openrouter/openrouter/free"
 DEFAULT_OPENROUTER_API_BASE = "https://openrouter.ai/api/v1"
 DEFAULT_MAX_TOKENS = 4096
