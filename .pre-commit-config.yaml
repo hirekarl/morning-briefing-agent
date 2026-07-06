@@ -31,6 +31,11 @@ repos:
         language: system
         types: [python]
         pass_filenames: false
+      - id: mdformat
+        name: mdformat
+        entry: uv run mdformat --wrap no --number
+        language: system
+        types: [markdown]
 
   - repo: https://github.com/commitizen-tools/commitizen
     rev: v4.16.4

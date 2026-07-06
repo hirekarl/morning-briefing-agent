@@ -14,6 +14,7 @@ curl -L -X POST 'http://0.0.0.0:4000/key/generate' \
 ```
 
 Response:
+
 ```json
 {"key": "sk-12..."}
 ```

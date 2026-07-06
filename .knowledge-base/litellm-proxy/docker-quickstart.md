@@ -6,6 +6,7 @@
 curl -fsSL https://raw.githubusercontent.com/BerriAI/litellm/main/scripts/install.sh | sh
 litellm --setup
 ```
+
 Walks through provider selection, API key entry, port/master key configuration, and auto-generates `litellm_config.yaml`.
 
 ## Docker: single container
@@ -32,6 +33,7 @@ docker compose up
 ```
 
 Fuller `.env` example:
+
 ```bash
 LITELLM_MASTER_KEY="sk-1234"
 LITELLM_SALT_KEY="generate-strong-random-value"

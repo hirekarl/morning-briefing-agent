@@ -78,6 +78,7 @@ agent("What is the meaning of life?")
 ## Why choose the proxy over calling OpenRouter directly
 
 Use the proxy when the team needs things OpenRouter alone doesn't give you as a shared service:
+
 - **Virtual keys per teammate** with independent `rpm_limit`/`tpm_limit` (see [`litellm-proxy/virtual-keys-and-rate-limits.md`](litellm-proxy/virtual-keys-and-rate-limits.md)) — useful when multiple people on the team are hitting the same upstream OpenRouter key.
 - **One config.yaml swap** to change providers/models for the whole team without touching agent code.
 - **Fallbacks and load balancing** across multiple model deployments (`router_settings`, `litellm_settings.fallbacks` — see [`litellm-proxy/config-yaml-reference.md`](litellm-proxy/config-yaml-reference.md)).
