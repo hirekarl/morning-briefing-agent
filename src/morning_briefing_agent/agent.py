@@ -41,4 +41,5 @@ def build_agent(settings: Settings | None = None) -> Agent:
         model=build_model(resolved_settings),
         tools=[check_gmail, check_calendar, check_slack],
         system_prompt=SYSTEM_PROMPT,
+        callback_handler=None,
     )
