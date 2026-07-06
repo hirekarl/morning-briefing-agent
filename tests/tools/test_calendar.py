@@ -55,6 +55,26 @@ def test_fetch_upcoming_events_returns_empty_for_no_items(patch_utcnow: datetime
     assert fetch_upcoming_events(service) == []
 
 
+def test_fetch_upcoming_events_excludes_cancelled_events(patch_utcnow: datetime) -> None:
+    cancelled = load_fixture("calendar_event_cancelled.json")
+    kept = load_fixture("calendar_event_with_attendees.json")
+    service = FakeCalendarService(items=[cancelled, kept])
+
+    result = fetch_upcoming_events(service)
+
+    assert result == [parse_calendar_event(kept)]
+
+
+def test_fetch_upcoming_events_excludes_self_declined_events(patch_utcnow: datetime) -> None:
+    declined = load_fixture("calendar_event_self_declined.json")
+    kept = load_fixture("calendar_event_with_attendees.json")
+    service = FakeCalendarService(items=[declined, kept])
+
+    result = fetch_upcoming_events(service)
+
+    assert result == [parse_calendar_event(kept)]
+
+
 def test_check_calendar_wires_credentials_service_and_fetch(mocker: Any) -> None:
     fake_creds = object()
     fake_service = object()

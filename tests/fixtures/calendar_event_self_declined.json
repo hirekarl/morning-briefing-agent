@@ -1,0 +1,11 @@
+{
+  "status": "confirmed",
+  "summary": "Optional standup",
+  "start": { "dateTime": "2026-07-05T09:00:00-04:00" },
+  "end": { "dateTime": "2026-07-05T09:15:00-04:00" },
+  "location": "",
+  "attendees": [
+    { "email": "karl@example.com", "responseStatus": "declined", "self": true },
+    { "email": "bob@example.com", "responseStatus": "accepted" }
+  ]
+}

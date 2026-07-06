@@ -39,6 +39,15 @@ def _extract_time(time_block: dict[str, str]) -> str:
     return time_block.get("dateTime") or time_block.get("date") or ""
 
 
+def _is_relevant_event(raw: dict[str, Any]) -> bool:
+    if raw.get("status") == "cancelled":
+        return False
+    return not any(
+        attendee.get("self") and attendee.get("responseStatus") == "declined"
+        for attendee in raw.get("attendees", [])
+    )
+
+
 def parse_calendar_event(raw: dict[str, Any]) -> EventSummary:
     return EventSummary(
         title=raw.get("summary", ""),
@@ -66,7 +75,9 @@ def fetch_upcoming_events(
         )
         .execute()
     )
-    return [parse_calendar_event(item) for item in response.get("items", [])]
+    return [
+        parse_calendar_event(item) for item in response.get("items", []) if _is_relevant_event(item)
+    ]
 
 
 @tool
