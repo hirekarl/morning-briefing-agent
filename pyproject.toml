@@ -6,12 +6,12 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "google-api-python-client>=2.198.0",
-    "google-auth>=2.55.1",
+    "google-auth>=2.55.2",
     "google-auth-httplib2>=0.4.0",
     "google-auth-oauthlib>=1.4.0",
     "python-dotenv>=1.2.2",
     "slack-sdk>=3.43.0",
-    "strands-agents[litellm]>=1.45.0",
+    "strands-agents[litellm]>=1.47.0",
 ]
 
 [project.scripts]
@@ -22,12 +22,12 @@ dev = [
     "commitizen>=4.16.4",
     "mdformat>=1.0.0",
     "mdformat-gfm>=1.0.0",
-    "mypy>=2.1.0",
+    "mypy>=2.2.0",
     "pre-commit>=4.6.0",
     "pytest>=9.1.1",
     "pytest-cov>=7.1.0",
     "pytest-mock>=3.15.1",
-    "ruff>=0.15.20",
+    "ruff>=0.15.21",
 ]
 
 [build-system]
